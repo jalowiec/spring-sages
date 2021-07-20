@@ -5,6 +5,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class FakePaymentService implements PaymentService {
 
     private final PaymentIdGenerator paymentIdGenerator;
     private final  PaymentRepository paymentRepository;
-
+    private final ApplicationEventPublisher eventPublisher;
 
 
     @LogPayments
@@ -33,7 +34,9 @@ public class FakePaymentService implements PaymentService {
                 .timestamp(Instant.now())
                 .status(PaymentStatus.STARTED)
                 .build();
-        return paymentRepository.save(payment);
+        eventPublisher.publishEvent(new PaymentsStatusChangedEvent(this, payment));
+        throw new RuntimeException();
+        //return paymentRepository.save(payment);
 
     }
 

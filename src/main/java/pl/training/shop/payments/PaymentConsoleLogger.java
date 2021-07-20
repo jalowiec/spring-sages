@@ -1,16 +1,40 @@
 package pl.training.shop.payments;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.*;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 @Log
 @Aspect
-//@Component
+@RequiredArgsConstructor
 public class PaymentConsoleLogger {
 
-    public static final String LOG_FORMAT  = "A new payment of %s has been initiated";
+    private static final String MESSAGE_KEY = "paymentInfo";
+
+    private final MessageSource messageSource;
+
+
+    @Before(value = "@annotation(LogPayments) && args(paymentRequest)")
+    public void beforePayment(PaymentRequest paymentRequest){
+        log.info("New Payment: " + paymentRequest );
+
+    }
+
+    @After(value = "@annotation(LogPayments)")
+    public void afterPayment(){
+        log.info("After payment");
+    }
+
+    @AfterThrowing(value = "@annotation(LogPayments)", throwing = "exception")
+    public void onException(Exception exception){
+        log.info("Exception!!!");
+    }
+
 
     @AfterReturning(value = "@annotation(LogPayments)", returning = "payment")
     public void log(Payment payment){
@@ -18,7 +42,8 @@ public class PaymentConsoleLogger {
     }
 
     private String createLogEntry(Payment payment){
-        return String.format(LOG_FORMAT, payment.getMoney());
+        return messageSource.getMessage(MESSAGE_KEY, new String[] {payment.getMoney().toString()}, Locale.getDefault());
+
     }
 
 
