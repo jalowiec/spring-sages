@@ -5,12 +5,14 @@ import lombok.extern.java.Log;
 import org.aspectj.lang.annotation.*;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
 @Log
 @Aspect
+@Order(50)
 @RequiredArgsConstructor
 public class PaymentConsoleLogger {
 
@@ -21,7 +23,7 @@ public class PaymentConsoleLogger {
 
     @Before(value = "@annotation(LogPayments) && args(paymentRequest)")
     public void beforePayment(PaymentRequest paymentRequest){
-        log.info("New Payment: " + paymentRequest );
+        log.info("----------------------------New Payment: " + paymentRequest );
 
     }
 

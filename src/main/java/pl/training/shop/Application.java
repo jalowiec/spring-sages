@@ -10,6 +10,8 @@ import pl.training.shop.products.ProductType;
 
 
 import java.awt.print.Book;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,12 +41,20 @@ public class Application {
 
         try (AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(BASE_PACKAGE)){
 
+            System.out.println("===== Beans list: ==== >>");
+            System.out.println("bean counter: " + applicationContext.getBeanDefinitionCount());
+            Arrays.stream(applicationContext.getBeanDefinitionNames())
+                    .forEach(System.out::println);
+            System.out.println("<< ===== Beans list ====");
+
+
             var shopService = applicationContext.getBean(ShopService.class);
             shopService.addProduct(VIDEO_PRODUCT);
             shopService.addProduct(BOOK_PRODUCT);
             log.info(shopService.getProducts(0, 100).toString());
 
             var order = new Order(List.of(VIDEO_PRODUCT, BOOK_PRODUCT));
+            //var order = new Order(Collections.emptyList());
             shopService.placeOrder(order);
             var payment = shopService.payForOrder(order.getId());
             log.info(payment.getId());

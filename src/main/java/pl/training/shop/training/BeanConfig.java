@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
+@EnableAspectJAutoProxy
 public class BeanConfig {
 
 
@@ -17,7 +19,6 @@ public class BeanConfig {
     }
 
     @Bean
-    @Scope(BeanDefinition.SCOPE_PROTOTYPE)
     public Person getPersonOne(){
         System.out.println("utworzenie obiektu Person One");
         return new Person();

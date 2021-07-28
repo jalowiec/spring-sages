@@ -9,6 +9,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import pl.training.shop.common.profiler.ExecutionTime;
+import pl.training.shop.common.retryer.Retry;
+
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -26,6 +29,8 @@ public class FakePaymentService implements PaymentService {
 
 
     @LogPayments
+    @ExecutionTime
+    @Retry
     @Override
     public Payment process(PaymentRequest paymentRequest){
         var payment = Payment.builder()
@@ -35,8 +40,8 @@ public class FakePaymentService implements PaymentService {
                 .status(PaymentStatus.STARTED)
                 .build();
         eventPublisher.publishEvent(new PaymentsStatusChangedEvent(this, payment));
-        throw new RuntimeException();
-        //return paymentRepository.save(payment);
+       // throw new RuntimeException();
+        return paymentRepository.save(payment);
 
     }
 

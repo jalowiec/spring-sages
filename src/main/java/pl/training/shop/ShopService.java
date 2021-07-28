@@ -7,8 +7,10 @@ import pl.training.shop.orders.OrderService;
 import pl.training.shop.payments.Payment;
 import pl.training.shop.payments.PaymentRequest;
 import pl.training.shop.payments.PaymentService;
+import pl.training.shop.products.PAA;
 import pl.training.shop.products.Product;
 import pl.training.shop.products.ProductService;
+
 
 @RequiredArgsConstructor
 public class ShopService {
@@ -16,7 +18,10 @@ public class ShopService {
     private final OrderService orderService;
     private final PaymentService paymentService;
 
+
+    @PAA
     public Product addProduct(Product product){
+        System.out.println("dodanie produkctu!!!");
         return productService.add(product);
     }
 
