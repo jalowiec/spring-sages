@@ -10,14 +10,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import pl.training.shop.common.profiler.ExecutionTime;
-import pl.training.shop.common.retryer.Retry;
 
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.transaction.Transactional;
 import java.time.Instant;
 
 @Log
+@Transactional
 @RequiredArgsConstructor
 //@Scope(BeanDefinition.SCOPE_SINGLETON)
 //@Service("paymentService")
@@ -30,7 +31,6 @@ public class FakePaymentService implements PaymentService {
 
     @LogPayments
     @ExecutionTime
-    @Retry
     @Override
     public Payment process(PaymentRequest paymentRequest){
         var payment = Payment.builder()

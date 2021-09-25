@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import pl.training.shop.common.profiler.Profiler;
-import pl.training.shop.common.retryer.RetryService;
+import pl.training.shop.common.retryer.MethodExecutor;
 import pl.training.shop.common.validator.ModelValidator;
 import pl.training.shop.common.validator.ValidatorService;
 
@@ -34,8 +34,8 @@ public class CommonConfiguration {
     }
 
     @Bean
-    public RetryService retryService(){
-        return new RetryService();
+    public MethodExecutor methodExecutor(){
+        return new MethodExecutor();
     }
 
 }

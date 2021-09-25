@@ -8,14 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 //@Repository("paymentRepository")
-public class PaymentRepositoryHashMap implements PaymentRepository{
+public class PaymentRepositoryHashMap{
+    //implements } PaymentRepository{
 
     @Setter
     private Map<String, Payment> paymentMap = new HashMap<>();
 
-    @Override
+    //@Override
     public Payment save(Payment payment) {
-        paymentMap.put(payment.getId(), payment);
+        paymentMap.put(payment.getId().toString(), payment);
         return payment;
     }
 }

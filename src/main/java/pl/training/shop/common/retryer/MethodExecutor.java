@@ -1,22 +1,33 @@
 package pl.training.shop.common.retryer;
 
+import lombok.Setter;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 
 @Aspect
-public class RetryService {
+public class MethodExecutor {
 
-    //@AfterThrowing("@annotation(Retry)")
-    @Before("@annotation(Retry)")
-    public void afterThrowing(JoinPoint joinPoint){
+    @Setter
+    private int attemps = 3;
 
-        System.out.println(joinPoint.getTarget().toString());
-        System.out.println(joinPoint.getThis().toString());
-        joinPoint.
-        System.out.println("AFTER THROWING");
+
+    @Around("@annotation(Retry)")
+    public Object afterThrowing(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
+        int currentAttempt = 0;
+        Throwable throwable = new Throwable();
+        do{
+            System.out.println("###############ADD AROUND");
+            currentAttempt++;
+            try {
+                proceedingJoinPoint.proceed();
+            } catch(Throwable t){
+                throwable = t;
+            }
+        } while(currentAttempt <= attemps);
+        throw new TooManyAttemps();
+
     }
+
 
 }
